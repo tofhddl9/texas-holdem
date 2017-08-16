@@ -36,7 +36,7 @@ void ATH_Pawn::Tick(float DeltaTime)
 
 	{
 		FRotator NewRotation = GetActorRotation();
-		NewRotation.Pitch = FMath::Clamp(NewRotation.Pitch + CameraInput.Y, -80.0f, -15.0f);
+		NewRotation.Pitch = FMath::Clamp(NewRotation.Pitch + CameraInput.Y, -80.0f, 0.0f);
 		SetActorRotation(NewRotation);
 	}
 }

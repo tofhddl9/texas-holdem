@@ -19,8 +19,26 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UDeck* GetDeck();
 
+	void PreFlop();
+	void GameInit();
+
 protected:
 	virtual void BeginPlay() override;
 	UDeck* deck;
+	UCard* flopCard[3];
+	UCard* turnCard;
+	UCard* riverCard;
+	int8 turn;
+	int8 sb;
+	int8 bb;
+	int8 dealer;
+	int8 numTotalPlayer;
+	int8 numActivePlayer;
+	int8 numPlayerActed;
+	int bigBet;
+	int smallBet;
+	int pot;
+
+
 	
 };

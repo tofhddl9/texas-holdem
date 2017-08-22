@@ -27,16 +27,16 @@ class TEXAS_API ATH_GameState : public AGameStateBase
 	
 public:
 	UFUNCTION(BlueprintCallable)
+	void Update();
+
+	UFUNCTION(BlueprintCallable)
 	UDeck* GetDeck();
 
-	void PreFlop();
 	void GameInit();
-	//void PassTheTurn(int8 turn);
 
 protected:
 	virtual void BeginPlay() override;
 	static const int MAXPLAYER = 10;
-	//APlayerState* players[MAXPLAYER];
 	UDeck* deck;
 	UCard* flopCard[3];
 	UCard* turnCard;
@@ -45,13 +45,18 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int turn;
+	
+	int sb;
+	int bb;
+	int dealer;
 
-	int8 sb;
-	int8 bb;
-	int8 dealer;
-	int8 numTotalPlayer;
-	int8 numActivePlayer;
-	int8 numPlayerActed;
+	int tick;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int numTotalPlayer;
+	
+	int numActivePlayer;
+	int numPlayerActed;
 	int playerBet[MAXPLAYER];
 	int bigBet;
 	int smallBet;

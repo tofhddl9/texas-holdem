@@ -10,6 +10,16 @@
 /**
  * 
  */
+
+UENUM(BlueprintType)
+enum class Action : uint8
+{
+	CALL UMETA(DisplayName = "CALL"),
+	FOLD UMETA(DisplayName = "FOLD"),
+	RAISE UMETA(DisplayName = "RAISE"),
+	CHECK UMETA(DisplayName = "CHECK")
+};
+
 UCLASS(BlueprintType)
 class TEXAS_API ATH_GameState : public AGameStateBase
 {
@@ -17,24 +27,37 @@ class TEXAS_API ATH_GameState : public AGameStateBase
 	
 public:
 	UFUNCTION(BlueprintCallable)
+	void Update();
+
+	UFUNCTION(BlueprintCallable)
 	UDeck* GetDeck();
 
-	void PreFlop();
 	void GameInit();
 
 protected:
 	virtual void BeginPlay() override;
+	static const int MAXPLAYER = 10;
 	UDeck* deck;
 	UCard* flopCard[3];
 	UCard* turnCard;
 	UCard* riverCard;
-	int8 turn;
-	int8 sb;
-	int8 bb;
-	int8 dealer;
-	int8 numTotalPlayer;
-	int8 numActivePlayer;
-	int8 numPlayerActed;
+	Action action;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int turn;
+	
+	int sb;
+	int bb;
+	int dealer;
+
+	int tick;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int numTotalPlayer;
+	
+	int numActivePlayer;
+	int numPlayerActed;
+	int playerBet[MAXPLAYER];
 	int bigBet;
 	int smallBet;
 	int pot;

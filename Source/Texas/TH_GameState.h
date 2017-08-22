@@ -31,12 +31,12 @@ public:
 
 	void PreFlop();
 	void GameInit();
-	void PassTheTurn(int8 turn);
+	//void PassTheTurn(int8 turn);
 
 protected:
 	virtual void BeginPlay() override;
 	static const int MAXPLAYER = 10;
-	APlayerState* players[MAXPLAYER];
+	//APlayerState* players[MAXPLAYER];
 	UDeck* deck;
 	UCard* flopCard[3];
 	UCard* turnCard;

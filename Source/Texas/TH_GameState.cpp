@@ -20,7 +20,9 @@ void ATH_GameState::GameInit()
 	deck = UDeck::CreateDeck();
 	deck->Init();// game의 상위 단계에서 한 번 하면 됨.
 	deck->Shuffle();
-	dealer = -1; // game의 상위 단계에서 한 번 하면 됨.
+	dealer = 0; // game의 상위 단계에서 한 번 하면 됨.
+	numActivePlayer = 2;//
+	numTotalPlayer = 2;//
 	dealer = (dealer++) % numTotalPlayer;
 	sb = (sb++) % numTotalPlayer;
 	bb = (bb++) % numTotalPlayer;
@@ -28,8 +30,6 @@ void ATH_GameState::GameInit()
 	bigBet = 2;//
 	smallBet = bigBet / 2;
 	pot = bigBet + smallBet;//
-	numActivePlayer = 2;//
-	numTotalPlayer = 2;//
 }
 
 

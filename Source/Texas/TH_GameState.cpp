@@ -20,30 +20,32 @@ void ATH_GameState::GameInit()
 	deck = UDeck::CreateDeck();
 	deck->Init();// game의 상위 단계에서 한 번 하면 됨.
 	deck->Shuffle();
+	dealer = -1; // game의 상위 단계에서 한 번 하면 됨.
 	dealer = (dealer++) % numTotalPlayer;
 	sb = (sb++) % numTotalPlayer;
 	bb = (bb++) % numTotalPlayer;
+	turn = bb;
 	bigBet = 2;//
 	smallBet = bigBet / 2;
 	pot = bigBet + smallBet;//
-	turn = (bb + 1) % numTotalPlayer;
-	
 	numActivePlayer = 2;//
 	numTotalPlayer = 2;//
-	//thisAction = GetPlayerAction();
-	switch (thisAction)
-	{
-		case fold:break;
-		case call:break;
-		case raise:break;
-	case check:break;
-	}
-
 }
+
 
 void ATH_GameState::PreFlop()
 {
 	while (numActivePlayer != numPlayerActed) {
-
+		turn = (turn + 1) % numTotalPlayer;
+		//EnableAction(turn);
+		//action = GetAction();
+		//DisableAction(turn);
+		/*switch(action)
+		{
+			case Action::FOLD:numActivePlayer--;break;
+			case Action::CALL:numPlayerActed++;break;
+			case Action::RAISE:break;
+			case Action::CHECK:break;
+		}*/
 	}
 }

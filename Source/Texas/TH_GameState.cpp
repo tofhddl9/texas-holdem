@@ -16,6 +16,7 @@ void ATH_GameState::Update()
 	if (tick > 100) {
 		tick = 0;
 		turn = (turn + 1) % numTotalPlayer;
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "TurnChange");
 	}
 }
 

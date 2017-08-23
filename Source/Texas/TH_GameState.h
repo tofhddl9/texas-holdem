@@ -36,6 +36,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
 	static const int MAXPLAYER = 10;
 	UDeck* deck;
 	UCard* flopCard[3];

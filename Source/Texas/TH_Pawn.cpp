@@ -48,6 +48,7 @@ void ATH_Pawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAxis("CameraPitch", this, &ATH_Pawn::PitchCamera);
 	PlayerInputComponent->BindAxis("CameraYaw", this, &ATH_Pawn::YawCamera);
+	
 }
 
 void ATH_Pawn::PitchCamera(float AxisValue)

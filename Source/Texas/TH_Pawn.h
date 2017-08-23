@@ -25,6 +25,12 @@ protected:
 	FVector2D CameraInput;
 	void PitchCamera(float AxisValue);
 	void YawCamera(float AxisValue);
+	
+	void Call();
+	void Fold();
+	void Raise();
+	void Check();
+
 
 public:	
 	// Called every frame

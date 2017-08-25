@@ -27,7 +27,7 @@ class TEXAS_API ATH_GameState : public AGameStateBase
 	
 public:
 	UFUNCTION(BlueprintCallable)
-	void PassTurn();
+	void Update();
 
 	UFUNCTION(BlueprintCallable)
 	UDeck* GetDeck();
@@ -38,8 +38,6 @@ protected:
 	virtual void BeginPlay() override;
 
 	static const int MAXPLAYER = 10;
-	
-	
 	UDeck* deck;
 	UCard* flopCard[3];
 	UCard* turnCard;
@@ -52,6 +50,8 @@ protected:
 	int sb;
 	int bb;
 	int dealer;
+
+	int tick;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int numTotalPlayer;

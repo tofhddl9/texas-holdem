@@ -20,7 +20,7 @@ ATH_Pawn::ATH_Pawn()
 void ATH_Pawn::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	acted = false;
 }
 
 // Called every frame
@@ -48,7 +48,10 @@ void ATH_Pawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAxis("CameraPitch", this, &ATH_Pawn::PitchCamera);
 	PlayerInputComponent->BindAxis("CameraYaw", this, &ATH_Pawn::YawCamera);
-	
+	PlayerInputComponent->BindAction("ActionCall", IE_Pressed, this, &ATH_Pawn::Call);
+	PlayerInputComponent->BindAction("ActionFold", IE_Pressed, this, &ATH_Pawn::Fold);
+	PlayerInputComponent->BindAction("ActionRaise", IE_Pressed, this, &ATH_Pawn::Raise);
+	PlayerInputComponent->BindAction("ActionCheck", IE_Pressed, this, &ATH_Pawn::Check);
 }
 
 void ATH_Pawn::PitchCamera(float AxisValue)
@@ -59,4 +62,38 @@ void ATH_Pawn::PitchCamera(float AxisValue)
 void ATH_Pawn::YawCamera(float AxisValue)
 {
 	CameraInput.X = AxisValue;
+}
+
+void ATH_Pawn::Call()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Call");
+	acted = true;
+}
+
+void ATH_Pawn::Fold()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Fold");
+	acted = true;
+}
+
+void ATH_Pawn::Raise()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Raise");
+	acted = true;
+}
+
+void ATH_Pawn::Check()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Check");
+	acted = true;
+}
+
+bool ATH_Pawn::GetActed()
+{
+	return acted;
+}
+
+void ATH_Pawn::SetActed(bool act)
+{
+	acted = act;
 }

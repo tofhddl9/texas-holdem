@@ -26,6 +26,9 @@ protected:
 	void PitchCamera(float AxisValue);
 	void YawCamera(float AxisValue);
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool acted;
+
 	void Call();
 	void Fold();
 	void Raise();
@@ -39,6 +42,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	
-	
+	UFUNCTION(BlueprintCallable)
+	bool GetActed();
+
+	UFUNCTION(BlueprintCallable)		
+	void SetActed(bool act);
 };

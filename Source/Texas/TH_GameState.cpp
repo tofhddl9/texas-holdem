@@ -10,14 +10,11 @@ void ATH_GameState::BeginPlay()
 	//PreFlop();
 }
 
-void ATH_GameState::Update()
+void ATH_GameState::PassTurn()
 {
-	tick++;
-	if (tick > 100) {
-		tick = 0;
-		turn = (turn + 1) % numTotalPlayer;
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "TurnChange");
-	}
+	turn = (turn+1) % numTotalPlayer;
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "TurnChange");
+	GEngine->AddOnScreenDebugMessage(-10, 5.f, FColor::Yellow, FString::Printf(TEXT("turn: %d"), turn));
 }
 
 UDeck* ATH_GameState::GetDeck()
@@ -30,7 +27,6 @@ void ATH_GameState::GameInit()
 	deck = UDeck::CreateDeck();
 	deck->Init();// game의 상위 단계에서 한 번 하면 됨.
 	deck->Shuffle();
-	tick = 0;
 	dealer = 0; // game의 상위 단계에서 한 번 하면 됨.
 	sb = dealer + 1;//
 	bb = sb + 1;//

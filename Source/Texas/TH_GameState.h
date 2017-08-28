@@ -64,5 +64,4 @@ protected:
 	int pot;
 
 
-	
 };

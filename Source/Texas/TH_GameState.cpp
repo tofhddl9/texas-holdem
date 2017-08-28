@@ -5,7 +5,7 @@
 void ATH_GameState::BeginPlay()
 {
 	Super::BeginPlay();
-
+	GEngine->AddOnScreenDebugMessage(-10, 5.f, FColor::Yellow, FString::Printf(TEXT("turn: %d"), turn));
 	GameInit();
 	//PreFlop();
 }
@@ -13,8 +13,7 @@ void ATH_GameState::BeginPlay()
 void ATH_GameState::PassTurn()
 {
 	turn = (turn+1) % numTotalPlayer;
-	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "TurnChange");
-	GEngine->AddOnScreenDebugMessage(-10, 5.f, FColor::Yellow, FString::Printf(TEXT("turn: %d"), turn));
+	GEngine->AddOnScreenDebugMessage(-10, 1.f, FColor::Yellow, FString::Printf(TEXT("turn: %d"), turn));
 }
 
 UDeck* ATH_GameState::GetDeck()

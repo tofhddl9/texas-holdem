@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TH_Pawn.h"
+#include "Classes/GameFramework/PlayerState.h"
 
 // Sets default values
 ATH_Pawn::ATH_Pawn()
@@ -21,6 +22,8 @@ void ATH_Pawn::BeginPlay()
 {
 	Super::BeginPlay();
 	acted = false;
+	is_tick_start = false;
+	tick = 0;
 }
 
 // Called every frame
@@ -28,10 +31,17 @@ void ATH_Pawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (is_tick_start && tick < 200) tick++;
+	if (tick == 200) {
+		Call();
+		is_tick_start = false;
+		tick = 0;
+	}
+
 	{
 		FRotator NewRotation = GetActorRotation();
 		NewRotation.Yaw += CameraInput.X;
-		SetActorRotation(NewRotation);
+		SetActorRotation(NewRotation);	
 	}
 
 	{
@@ -96,4 +106,26 @@ bool ATH_Pawn::GetActed()
 void ATH_Pawn::SetActed(bool act)
 {
 	acted = act;
+}
+/*
+void ATH_Pawn::ActivateInput()
+{
+	EnableInput(Cast<APlayerController>(Controller));
+}
+
+void ATH_Pawn::DeactivateInput()
+{
+	DisableInput(Cast<APlayerController>(Controller));
+}
+*/
+APlayerController* ATH_Pawn::GetPlayerController(APlayerState* player_state_)
+{
+	for (FConstPlayerControllerIterator it = player_state_->GetWorld()->GetPlayerControllerIterator(); it; ++it)
+	{
+		if ((*it)->PlayerState == player_state_)
+		{
+			return *it;
+		}
+	}
+	return nullptr;
 }

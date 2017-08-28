@@ -22,6 +22,8 @@ protected:
 	UCameraComponent *PlayerCamera;
 	USceneComponent *VisibleComponent;
 
+	AController *Controller;
+
 	FVector2D CameraInput;
 	void PitchCamera(float AxisValue);
 	void YawCamera(float AxisValue);
@@ -29,11 +31,23 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool acted;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool is_tick_start;
+
 	void Call();
 	void Fold();
 	void Raise();
 	void Check();
 
+	//UFUNCTION(BlueprintCallable)
+	//void ActivateInput();
+	//UFUNCTION(BlueprintCallable)
+	//void DeactivateInput();
+
+	UFUNCTION(BlueprintCallable)
+	static APlayerController* GetPlayerController(APlayerState* player_state);
+	
+	int tick;
 
 public:	
 	// Called every frame

@@ -35,10 +35,26 @@ void ATH_GameState::GameInit()
 	dealer = (dealer++) % numTotalPlayer;
 	sb = (sb+1) % numTotalPlayer;
 	bb = (bb+1) % numTotalPlayer;
-	turn = bb;
+	turn = (bb+1) % numTotalPlayer;
 	bigBet = 2;//
 	smallBet = bigBet / 2;
 	pot = bigBet + smallBet;//
+	biggestBet = bigBet;
+	for (int i = 0; i < numTotalPlayer; ++i) {
+		playerBet[i] = 0;
+	}
+	playerBet[bb] = bigBet;
+	playerBet[sb] = smallBet;
+}
+
+int ATH_GameState::GetNumTotalPlayer()
+{
+	return numTotalPlayer;
+}
+
+void ATH_GameState::SetNumTotalPlayer(int num)
+{
+	numTotalPlayer = num;
 }
 
 int ATH_GameState::GetNumPlayerActed()
@@ -59,6 +75,26 @@ void ATH_GameState::SetPot(int chips)
 {
 	pot = chips;
 }
+
+int ATH_GameState::GetPlayerBet(int turn)
+{
+	return playerBet[turn];
+}
+
+void ATH_GameState::SetPlayerBet(int turn, int money)
+{
+	playerBet[turn] = money;
+}
+
+int ATH_GameState::GetBiggestBet()
+{
+	return biggestBet;
+}
+void ATH_GameState::SetBiggestBet(int chips)
+{
+	biggestBet = chips;
+}
+
 /*void ATH_GameState::PreFlop()
 {
 	while (numActivePlayer != numPlayerActed) {

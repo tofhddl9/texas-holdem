@@ -8,7 +8,7 @@ ATH_Pawn::ATH_Pawn()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	
+
 	AutoPossessPlayer = EAutoReceiveInput::Disabled;
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
@@ -24,6 +24,7 @@ void ATH_Pawn::BeginPlay()
 	is_tick_start = false;
 	acted = false;
 	tick = 0;
+	MyGameState = GetWorld()->GetGameState<ATH_GameState>();
 }
 
 // Called every frame
@@ -36,7 +37,6 @@ void ATH_Pawn::Tick(float DeltaTime)
 		tick = 0;
 		Call();
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("%lld"), (long long)this));
-
 	}
 
 	{
@@ -79,9 +79,12 @@ void ATH_Pawn::Call()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Call");
 	acted = true;
-	ATH_GameState* const MyGameState = GetWorld() != NULL ? GetWorld()->GetGameState<ATH_GameState>() : NULL;
+
 	MyGameState->SetNumPlayerActed(MyGameState->GetNumPlayerActed()+1);
-	MyGameState->SetPot(MyGameState->GetPot() + 1);
+	//MyGameState->SetPot(MyGameState->GetPot() + 1);
+	turn = (PlayerState->PlayerId + 1) % MyGameState->GetNumTotalPlayer();
+	MyGameState->SetPot(MyGameState->GetPot() + MyGameState->GetBiggestBet() - MyGameState->GetPlayerBet(turn));
+	MyGameState->SetPlayerBet(turn, MyGameState->GetBiggestBet());
 }
 
 void ATH_Pawn::Fold()

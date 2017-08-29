@@ -34,10 +34,22 @@ public:
 	UDeck* GetDeck();
 
 
+	int GetNumTotalPlayer();
+	void SetNumTotalPlayer(int num);
+
 	int GetNumPlayerActed();
 	void SetNumPlayerActed(int num);
+	
 	int GetPot();
 	void SetPot(int chips);
+
+	int GetBiggestBet();
+	void SetBiggestBet(int chips);
+
+	int GetPlayerBet(int turn);
+	void SetPlayerBet(int turn, int money);
+
+
 
 	void GameInit();
 
@@ -74,4 +86,5 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int pot;
 
+	int biggestBet;
 };

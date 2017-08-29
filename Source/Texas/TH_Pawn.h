@@ -28,7 +28,7 @@ protected:
 	FVector2D CameraInput;
 	void PitchCamera(float AxisValue);
 	void YawCamera(float AxisValue);
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool acted;
 
@@ -44,6 +44,10 @@ protected:
 	static APlayerController* GetPlayerController(APlayerState* player_state);
 	
 	int tick;
+
+	int turn;
+
+	ATH_GameState* MyGameState;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

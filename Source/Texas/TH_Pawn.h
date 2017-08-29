@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Classes/Camera/CameraComponent.h"
+#include "TH_GameState.h"
 #include "TH_Pawn.generated.h"
 
 UCLASS()
@@ -23,7 +24,7 @@ protected:
 	USceneComponent *VisibleComponent;
 
 	AController *Controller;
-
+	
 	FVector2D CameraInput;
 	void PitchCamera(float AxisValue);
 	void YawCamera(float AxisValue);
@@ -39,22 +40,17 @@ protected:
 	void Raise();
 	void Check();
 
-	//UFUNCTION(BlueprintCallable)
-	//void ActivateInput();
-	//UFUNCTION(BlueprintCallable)
-	//void DeactivateInput();
-
 	UFUNCTION(BlueprintCallable)
 	static APlayerController* GetPlayerController(APlayerState* player_state);
 	
 	int tick;
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
 
 	UFUNCTION(BlueprintCallable)
 	bool GetActed();

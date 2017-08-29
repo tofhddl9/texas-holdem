@@ -7,7 +7,7 @@ void ATH_GameState::BeginPlay()
 	Super::BeginPlay();
 	GEngine->AddOnScreenDebugMessage(-10, 5.f, FColor::Yellow, FString::Printf(TEXT("turn: %d"), turn));
 	GameInit();
-	//PreFlop();
+	
 }
 
 void ATH_GameState::PassTurn()
@@ -31,6 +31,7 @@ void ATH_GameState::GameInit()
 	bb = sb + 1;//
 	numActivePlayer = 2;//
 	numTotalPlayer = 2;//
+	numPlayerActed = 0;
 	dealer = (dealer++) % numTotalPlayer;
 	sb = (sb+1) % numTotalPlayer;
 	bb = (bb+1) % numTotalPlayer;
@@ -40,7 +41,24 @@ void ATH_GameState::GameInit()
 	pot = bigBet + smallBet;//
 }
 
+int ATH_GameState::GetNumPlayerActed()
+{
+	return numPlayerActed;
+}
 
+void ATH_GameState::SetNumPlayerActed(int num)
+{
+	numPlayerActed = num;
+}
+
+int ATH_GameState::GetPot()
+{
+	return pot;
+}
+void ATH_GameState::SetPot(int chips)
+{
+	pot = chips;
+}
 /*void ATH_GameState::PreFlop()
 {
 	while (numActivePlayer != numPlayerActed) {

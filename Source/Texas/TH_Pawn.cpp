@@ -21,8 +21,8 @@ ATH_Pawn::ATH_Pawn()
 void ATH_Pawn::BeginPlay()
 {
 	Super::BeginPlay();
-	acted = false;
 	is_tick_start = false;
+	acted = false;
 	tick = 0;
 }
 
@@ -32,10 +32,11 @@ void ATH_Pawn::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	if (is_tick_start && tick < 200) tick++;
-	if (tick == 200) {
-		Call();
-		is_tick_start = false;
+	if (is_tick_start&&tick == 200) {
 		tick = 0;
+		Call();
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("%lld"), (long long)this));
+
 	}
 
 	{
@@ -78,6 +79,9 @@ void ATH_Pawn::Call()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Call");
 	acted = true;
+	ATH_GameState* const MyGameState = GetWorld() != NULL ? GetWorld()->GetGameState<ATH_GameState>() : NULL;
+	MyGameState->SetNumPlayerActed(MyGameState->GetNumPlayerActed()+1);
+	MyGameState->SetPot(MyGameState->GetPot() + 1);
 }
 
 void ATH_Pawn::Fold()
@@ -107,17 +111,7 @@ void ATH_Pawn::SetActed(bool act)
 {
 	acted = act;
 }
-/*
-void ATH_Pawn::ActivateInput()
-{
-	EnableInput(Cast<APlayerController>(Controller));
-}
 
-void ATH_Pawn::DeactivateInput()
-{
-	DisableInput(Cast<APlayerController>(Controller));
-}
-*/
 APlayerController* ATH_Pawn::GetPlayerController(APlayerState* player_state_)
 {
 	for (FConstPlayerControllerIterator it = player_state_->GetWorld()->GetPlayerControllerIterator(); it; ++it)

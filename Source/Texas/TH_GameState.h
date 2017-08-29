@@ -26,11 +26,18 @@ class TEXAS_API ATH_GameState : public AGameStateBase
 	GENERATED_BODY()
 	
 public:
+
 	UFUNCTION(BlueprintCallable)
 	void PassTurn();
 
 	UFUNCTION(BlueprintCallable)
 	UDeck* GetDeck();
+
+
+	int GetNumPlayerActed();
+	void SetNumPlayerActed(int num);
+	int GetPot();
+	void SetPot(int chips);
 
 	void GameInit();
 
@@ -55,13 +62,16 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int numTotalPlayer;
-	
 	int numActivePlayer;
 	int numPlayerActed;
-	int playerBet[MAXPLAYER];
-	int bigBet;
-	int smallBet;
-	int pot;
 
+	int playerBet[MAXPLAYER];
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int bigBet;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int smallBet;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int pot;
 
 };

@@ -35,9 +35,8 @@ void ATH_Pawn::Tick(float DeltaTime)
 	if (is_tick_start&&tick == 200) {
 		tick = 0;
 		Call();
-		is_tick_start = false;
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "!!!!");
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("%lld"), (long long*)this));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("%lld"), (long long)this));
+
 	}
 
 	{

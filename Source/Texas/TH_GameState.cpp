@@ -26,6 +26,7 @@ void ATH_GameState::GameInit()
 	deck = UDeck::CreateDeck();
 	deck->Init();// game의 상위 단계에서 한 번 하면 됨.
 	deck->Shuffle();
+	turnState = TurnState::PREFLOP;
 	dealer = 0; // game의 상위 단계에서 한 번 하면 됨.
 	sb = dealer + 1;//
 	bb = sb + 1;//
@@ -45,6 +46,30 @@ void ATH_GameState::GameInit()
 	}
 	playerBet[bb] = bigBet;
 	playerBet[sb] = smallBet;
+}
+
+void ATH_GameState::CheckGame()
+{
+	if (numPlayerActed == numActivePlayer) {
+		switch (turnState)
+		{
+		case TurnState::PREFLOP :
+			flopCard1 = deck->Draw();
+			flopCard2 = deck->Draw();
+			flopCard3 = deck->Draw();
+			numPlayerActed = 0;
+			turnState = TurnState::FLOP;
+			break;
+		case TurnState::FLOP :
+			turnCard = deck->Draw();
+			numPlayerActed = 0;
+			turnState = TurnState::RIVER;
+			break;
+		case TurnState::RIVER :
+			riverCard = deck->Draw();
+			break;
+		}
+	}
 }
 
 int ATH_GameState::GetNumTotalPlayer()

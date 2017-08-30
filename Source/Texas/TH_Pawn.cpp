@@ -81,10 +81,10 @@ void ATH_Pawn::Call()
 	acted = true;
 
 	MyGameState->SetNumPlayerActed(MyGameState->GetNumPlayerActed()+1);
-	//MyGameState->SetPot(MyGameState->GetPot() + 1);
 	turn = (PlayerState->PlayerId + 1) % MyGameState->GetNumTotalPlayer();
 	MyGameState->SetPot(MyGameState->GetPot() + MyGameState->GetBiggestBet() - MyGameState->GetPlayerBet(turn));
 	MyGameState->SetPlayerBet(turn, MyGameState->GetBiggestBet());
+	MyGameState->CheckGame();
 }
 
 void ATH_Pawn::Fold()

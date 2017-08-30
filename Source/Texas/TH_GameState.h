@@ -20,6 +20,15 @@ enum class Action : uint8
 	CHECK UMETA(DisplayName = "CHECK")
 };
 
+UENUM(BlueprintType)
+enum class TurnState : uint8
+{
+	PREFLOP UMETA(DisplayName = "PREFLOP"),
+	FLOP UMETA(DisplayName = "FLOP"),
+	TURN UMETA(DisplayName = "TURN"),
+	RIVER UMETA(DisplayName = "RIVER")
+};
+
 UCLASS(BlueprintType)
 class TEXAS_API ATH_GameState : public AGameStateBase
 {
@@ -33,6 +42,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UDeck* GetDeck();
 
+	TurnState turnState;
 
 	int GetNumTotalPlayer();
 	void SetNumTotalPlayer(int num);
@@ -49,7 +59,7 @@ public:
 	int GetPlayerBet(int turn);
 	void SetPlayerBet(int turn, int money);
 
-
+	void CheckGame();
 
 	void GameInit();
 
@@ -60,16 +70,25 @@ protected:
 	
 	
 	UDeck* deck;
-	UCard* flopCard[3];
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UCard* flopCard1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UCard* flopCard2;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UCard* flopCard3;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCard* turnCard;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCard* riverCard;
 	Action action;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int turn;
-	
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int sb;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int bb;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int dealer;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

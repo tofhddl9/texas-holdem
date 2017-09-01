@@ -57,6 +57,7 @@ void ATH_GameState::GameInit()
 	biggestBet = bigBet;
 	for (int i = 0; i < numTotalPlayer; ++i) {
 		playerBet[i] = 0;
+		playerBankroll[i] = 100;
 	}
 	playerBet[bb] = bigBet;
 	playerBet[sb] = smallBet;
@@ -94,7 +95,8 @@ void ATH_GameState::CheckGame()
 			for (int i = 0;i < numTotalPlayer;++i) {
 				playerHands[i][6] = riverCard;
 			}
-			winner = DetermineWinner();
+			winner = DetermineWinner(); // suppose winner is unique
+			ApplyGameResult(winner);
 			break;
 		}
 	}
@@ -139,6 +141,16 @@ void ATH_GameState::SetPlayerBet(int turn, int money)
 	playerBet[turn] = money;
 }
 
+int ATH_GameState::GetPlayerBankroll(int player)
+{
+	return playerBankroll[player];
+}
+
+void ATH_GameState::SetPlayerBankroll(int player, int money)
+{
+	playerBankroll[player] = money;
+}
+
 int ATH_GameState::GetBiggestBet()
 {
 	return biggestBet;
@@ -163,7 +175,7 @@ void ATH_GameState::SortPlayerHands()
 
 void ATH_GameState::ScoringHands()
 {
-	int numSamePattern;
+	
 }
 
 void ATH_GameState::AnalyzeHands()
@@ -176,4 +188,15 @@ int ATH_GameState::DetermineWinner()
 {
 	AnalyzeHands();
 	return 0;
+}
+
+void ATH_GameState::ApplyGameResult(int winner)
+{
+	for (int i = 0;i < numTotalPlayer;++i) {
+		if (i == winner) {
+			playerBankroll[i] += (pot - playerBet[i]);
+		} else {
+			playerBankroll[i] -= playerBet[i];
+		}
+	}
 }

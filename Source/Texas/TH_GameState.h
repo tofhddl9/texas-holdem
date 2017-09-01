@@ -60,8 +60,13 @@ public:
 	int GetBiggestBet();
 	void SetBiggestBet(int chips);
 
+	UFUNCTION(BlueprintCallable)
 	int GetPlayerBet(int turn);
 	void SetPlayerBet(int turn, int money);
+
+	UFUNCTION(BlueprintCallable)
+	int GetPlayerBankroll(int player);
+	void SetPlayerBankroll(int player,int money);
 
 	void CheckGame();
 
@@ -71,6 +76,7 @@ public:
 	void ScoringHands();
 	void AnalyzeHands();
 	int DetermineWinner();
+	void ApplyGameResult(int winner);
 
 protected:
 	virtual void BeginPlay() override;
@@ -107,16 +113,17 @@ protected:
 	int numActivePlayer;
 	int numPlayerActed;
 
-	int playerBet[MAXPLAYER];
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int pot;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int bigBet;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int smallBet;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int pot;
-
 	int biggestBet;
+	int playerBankroll[MAXPLAYER];
+	int playerBet[MAXPLAYER];
 	int rankScore[MAXPLAYER];
 
 	int winner;

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameStateBase.h"
+#include "Card.h"
 #include "Deck.h"
 #include "TH_GameState.generated.h"
 
@@ -42,6 +43,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UDeck* GetDeck();
 
+	UFUNCTION(BlueprintCallable)
+	UCard* GetPlayerHands(int player, int seq);
+
 	TurnState turnState;
 
 	int GetNumTotalPlayer();
@@ -62,6 +66,11 @@ public:
 	void CheckGame();
 
 	void GameInit();
+	void PreFlop();
+	void SortPlayerHands();
+	void ScoringHands();
+	void AnalyzeHands();
+	int DetermineWinner();
 
 protected:
 	virtual void BeginPlay() override;
@@ -70,6 +79,8 @@ protected:
 	
 	
 	UDeck* deck;
+	//UPROPERTY(BlueprintReadWrite)
+	UCard* playerHands[MAXPLAYER][7];
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCard* flopCard1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -106,4 +117,7 @@ protected:
 	int pot;
 
 	int biggestBet;
+	int rankScore[MAXPLAYER];
+
+	int winner;
 };

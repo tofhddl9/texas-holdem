@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TH_GameState.h"
-
+#include <algorithm>
 void ATH_GameState::BeginPlay()
 {
 	Super::BeginPlay();
@@ -19,6 +19,20 @@ void ATH_GameState::PassTurn()
 UDeck* ATH_GameState::GetDeck()
 {
 	return deck;
+}
+
+void ATH_GameState::PreFlop()
+{
+	for (int i = 0;i < numTotalPlayer; ++i) {
+		for (int j = 0;j < 2;++j) {
+			playerHands[i][j] = deck->Draw();
+		}
+	}
+}
+
+UCard* ATH_GameState::GetPlayerHands(int player, int seq)
+{
+	return playerHands[player][seq];
 }
 
 void ATH_GameState::GameInit()
@@ -46,6 +60,8 @@ void ATH_GameState::GameInit()
 	}
 	playerBet[bb] = bigBet;
 	playerBet[sb] = smallBet;
+	
+	PreFlop();
 }
 
 void ATH_GameState::CheckGame()
@@ -58,15 +74,27 @@ void ATH_GameState::CheckGame()
 			flopCard2 = deck->Draw();
 			flopCard3 = deck->Draw();
 			numPlayerActed = 0;
+			for (int i = 0;i < numTotalPlayer; ++i) {
+				playerHands[i][2] = flopCard1;
+				playerHands[i][3] = flopCard2;
+				playerHands[i][4] = flopCard3;
+			}
 			turnState = TurnState::FLOP;
 			break;
 		case TurnState::FLOP :
 			turnCard = deck->Draw();
 			numPlayerActed = 0;
+			for (int i = 0;i < numTotalPlayer;++i) {
+				playerHands[i][5] = turnCard;
+			}
 			turnState = TurnState::RIVER;
 			break;
 		case TurnState::RIVER :
 			riverCard = deck->Draw();
+			for (int i = 0;i < numTotalPlayer;++i) {
+				playerHands[i][6] = riverCard;
+			}
+			winner = DetermineWinner();
 			break;
 		}
 	}
@@ -120,19 +148,32 @@ void ATH_GameState::SetBiggestBet(int chips)
 	biggestBet = chips;
 }
 
-/*void ATH_GameState::PreFlop()
+bool sortByRank(const UCard* c1, const UCard* c2)
 {
-	while (numActivePlayer != numPlayerActed) {
-		turn = (turn + 1) % numTotalPlayer;
-		//EnableAction(turn);
-		//action = GetAction();
-		//DisableAction(turn);
-		switch(action)
-		{
-			case Action::FOLD:numActivePlayer--;break;
-			case Action::CALL:numPlayerActed++;break;
-			case Action::RAISE:break;
-			case Action::CHECK:break;
-		}
+	if (c1->number == 1) return false;
+	return c1->number < c2->number;
+}
+
+void ATH_GameState::SortPlayerHands()
+{
+	for (int i = 0;i < numTotalPlayer;++i) {
+		std::sort(&playerHands[i][0], &playerHands[i][0] + 6,sortByRank);
 	}
-}*/
+}
+
+void ATH_GameState::ScoringHands()
+{
+	int numSamePattern;
+}
+
+void ATH_GameState::AnalyzeHands()
+{
+	SortPlayerHands();
+	ScoringHands();
+}
+
+int ATH_GameState::DetermineWinner()
+{
+	AnalyzeHands();
+	return 0;
+}

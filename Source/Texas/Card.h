@@ -26,12 +26,13 @@ class TEXAS_API UCard : public UObject
 	
 public:
 
-	Pattern pattern;
-	int number;
-
 	UFUNCTION(BlueprintCallable)
 	int GetNum();
 
 	UFUNCTION(BlueprintCallable)
 	Pattern GetPattern();
+
+//protected:
+	Pattern pattern;
+	int number;
 };

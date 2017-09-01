@@ -32,8 +32,8 @@ void ATH_Pawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (is_tick_start && tick < 200) tick++;
-	if (is_tick_start&&tick == 200) {
+	if (is_tick_start && tick < 100) tick++;
+	if (is_tick_start&&tick == 100) {
 		tick = 0;
 		Call();
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("%lld"), (long long)this));

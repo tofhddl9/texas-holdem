@@ -46,8 +46,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UCard* GetPlayerHands(int player, int seq);
 
-	TurnState turnState;
-
 	int GetNumTotalPlayer();
 	void SetNumTotalPlayer(int num);
 
@@ -77,15 +75,19 @@ public:
 	void AnalyzeHands();
 	int DetermineWinner();
 	void ApplyGameResult(int winner);
+	void SetNewGame();
 
 protected:
 	virtual void BeginPlay() override;
 
 	static const int MAXPLAYER = 10;
 	
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool isHoleCardSpread;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TurnState turnState;
 	UDeck* deck;
-	//UPROPERTY(BlueprintReadWrite)
 	UCard* playerHands[MAXPLAYER][7];
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCard* flopCard1;
@@ -97,7 +99,7 @@ protected:
 	UCard* turnCard;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCard* riverCard;
-	Action action;
+	//Action action;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int turn;
@@ -125,6 +127,7 @@ protected:
 	int playerBankroll[MAXPLAYER];
 	int playerBet[MAXPLAYER];
 	int rankScore[MAXPLAYER];
+	bool isNewPlayer[MAXPLAYER];
 
 	int winner;
 };

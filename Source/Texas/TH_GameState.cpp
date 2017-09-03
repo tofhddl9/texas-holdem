@@ -7,7 +7,6 @@ void ATH_GameState::BeginPlay()
 	Super::BeginPlay();
 	GEngine->AddOnScreenDebugMessage(-10, 5.f, FColor::Yellow, FString::Printf(TEXT("turn: %d"), turn));
 	GameInit();
-	
 }
 
 void ATH_GameState::PassTurn()
@@ -37,31 +36,32 @@ UCard* ATH_GameState::GetPlayerHands(int player, int seq)
 
 void ATH_GameState::GameInit()
 {
+	isHoleCardSpread = false;
 	deck = UDeck::CreateDeck();
-	deck->Init();// game의 상위 단계에서 한 번 하면 됨.
+	deck->Init();
 	deck->Shuffle();
 	turnState = TurnState::PREFLOP;
-	dealer = 0; // game의 상위 단계에서 한 번 하면 됨.
-	sb = dealer + 1;//
-	bb = sb + 1;//
-	numActivePlayer = 2;//
+	dealer = 0;
+	sb = dealer + 1;
+	bb = sb + 1;
 	numTotalPlayer = 2;//
+	numActivePlayer = 2;// 
 	numPlayerActed = 0;
 	dealer = (dealer++) % numTotalPlayer;
 	sb = (sb+1) % numTotalPlayer;
 	bb = (bb+1) % numTotalPlayer;
 	turn = (bb+1) % numTotalPlayer;
-	bigBet = 2;//
+	bigBet = 2;
 	smallBet = bigBet / 2;
-	pot = bigBet + smallBet;//
+	pot = bigBet + smallBet;
 	biggestBet = bigBet;
 	for (int i = 0; i < numTotalPlayer; ++i) {
+		isNewPlayer[i] = false; // 플레이어 추가될 때 true로 set
 		playerBet[i] = 0;
 		playerBankroll[i] = 100;
 	}
 	playerBet[bb] = bigBet;
 	playerBet[sb] = smallBet;
-	
 	PreFlop();
 }
 
@@ -88,18 +88,50 @@ void ATH_GameState::CheckGame()
 			for (int i = 0;i < numTotalPlayer;++i) {
 				playerHands[i][5] = turnCard;
 			}
-			turnState = TurnState::RIVER;
+			turnState = TurnState::TURN;
 			break;
-		case TurnState::RIVER :
+		case TurnState::TURN :
 			riverCard = deck->Draw();
+			numPlayerActed = 0;
 			for (int i = 0;i < numTotalPlayer;++i) {
 				playerHands[i][6] = riverCard;
 			}
+			turnState = TurnState::RIVER;
+			break;
+		case TurnState::RIVER:
 			winner = DetermineWinner(); // suppose winner is unique
 			ApplyGameResult(winner);
+			SetNewGame();
 			break;
 		}
 	}
+}
+
+void ATH_GameState::SetNewGame()
+{
+	isHoleCardSpread = false;
+	deck = UDeck::CreateDeck();
+	deck->Init();
+	deck->Shuffle();
+	turnState = TurnState::PREFLOP;
+	numActivePlayer = 2;// 
+	numPlayerActed = 0;
+	dealer = (dealer++) % numTotalPlayer;
+	sb = (sb + 1) % numTotalPlayer;
+	bb = (bb + 1) % numTotalPlayer;
+	turn = (bb + 1) % numTotalPlayer;
+	pot = bigBet + smallBet;
+	biggestBet = bigBet;
+	for (int i = 0; i < numTotalPlayer; ++i) {
+		playerBet[i] = 0;
+		if (isNewPlayer[i]) {
+			playerBankroll[i] = 100;// new player에게만 필요.
+			isNewPlayer[i] = false;
+		}
+	}
+	playerBet[bb] = bigBet;
+	playerBet[sb] = smallBet;
+	PreFlop();
 }
 
 int ATH_GameState::GetNumTotalPlayer()

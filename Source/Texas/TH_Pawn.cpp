@@ -39,14 +39,13 @@ void ATH_Pawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (is_tick_start && tick < 150) {
+	if (is_tick_start && tick < 200) {
 		tick++;
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("%lld"), (long long)this));
 	}
-	if (is_tick_start&&tick == 150) {
+	if (is_tick_start&&tick == 200) {
 		tick = 0;
 		turn = MyGameState->GetTurn();
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("%lld"), (long long)this));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("%lld"), (long long)this));
 		switch (simulation[simulationIndex]) {
 		case 0: Call();simulationIndex=(simulationIndex+1)%8;break;
 		case 1: Check();simulationIndex = (simulationIndex + 1) % 8;break;
@@ -91,15 +90,6 @@ void ATH_Pawn::YawCamera(float AxisValue)
 	CameraInput.X = AxisValue;
 }
 
-int ATH_Pawn::TurnOver()
-{
-	//do {
-		//turn = (PlayerState->PlayerId + 1) % MyGameState->GetNumTotalPlayer();
-	//} while (MyGameState->GetisPlaying(turn) == false);
-	MyGameState->PassTurn();
-	return MyGameState->GetTurn();
-}
-
 void ATH_Pawn::Call()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Call");
@@ -109,7 +99,6 @@ void ATH_Pawn::Call()
 	MyGameState->SetPot(MyGameState->GetPot() + MyGameState->GetBiggestBet() - MyGameState->GetPlayerBet(turn));
 	MyGameState->SetPlayerBet(turn, MyGameState->GetBiggestBet());
 	MyGameState->CheckGame();
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("%lld"), (long long)this));
 }
 
 void ATH_Pawn::Fold()
@@ -131,7 +120,6 @@ void ATH_Pawn::Raise()
 	MyGameState->SetBiggestBet(MyGameState->GetBiggestBet() * 2);
 	MyGameState->SetPlayerBet(turn, MyGameState->GetBiggestBet());
 	MyGameState->CheckGame();
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("%lld"), (long long)this));
 }
 
 void ATH_Pawn::Check()
@@ -140,7 +128,6 @@ void ATH_Pawn::Check()
 	acted = true;
 	MyGameState->SetNumPlayerActed(MyGameState->GetNumPlayerActed() + 1);
 	MyGameState->CheckGame();
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("%lld"), (long long)this));
 }
 
 bool ATH_Pawn::GetActed()
@@ -153,7 +140,7 @@ void ATH_Pawn::SetActed(bool act)
 	acted = act;
 }
 
-APlayerController* ATH_Pawn::GetPlayerController(APlayerState* player_state_)
+APlayerController* ATH_Pawn::GetMyPlayerController(APlayerState* player_state_)
 {
 	for (FConstPlayerControllerIterator it = player_state_->GetWorld()->GetPlayerControllerIterator(); it; ++it)
 	{

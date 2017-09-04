@@ -5,14 +5,13 @@
 void ATH_GameState::BeginPlay()
 {
 	Super::BeginPlay();
-	GEngine->AddOnScreenDebugMessage(-10, 5.f, FColor::Yellow, FString::Printf(TEXT("turn: %d"), turn));
 	GameInit();
 }
 
 void ATH_GameState::PassTurn()
 {
-	turn = (turn+1) % numTotalPlayer;
-	GEngine->AddOnScreenDebugMessage(-10, 1.f, FColor::Yellow, FString::Printf(TEXT("turn: %d"), turn));
+	if (numActivePlayer == numTotalPlayer)turn = (turn+1) % numTotalPlayer;
+	else turn = (dealer + 1) % numActivePlayer;
 }
 
 int ATH_GameState::GetTurn()
@@ -74,7 +73,6 @@ void ATH_GameState::GameInit()
 void ATH_GameState::CheckGame()
 {
 	if (numPlayerActed == numActivePlayer) {
-		//turn = (dealer + 1) % numActivePlayer;
 		switch (turnState)
 		{
 		case TurnState::PREFLOP :
@@ -112,7 +110,6 @@ void ATH_GameState::CheckGame()
 			break;
 		}
 	}
-	//else PassTurn();
 }
 
 void ATH_GameState::SetNewGame()

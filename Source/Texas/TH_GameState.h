@@ -13,15 +13,6 @@
  */
 
 UENUM(BlueprintType)
-enum class Action : uint8
-{
-	CALL UMETA(DisplayName = "CALL"),
-	FOLD UMETA(DisplayName = "FOLD"),
-	RAISE UMETA(DisplayName = "RAISE"),
-	CHECK UMETA(DisplayName = "CHECK")
-};
-
-UENUM(BlueprintType)
 enum class TurnState : uint8
 {
 	PREFLOP UMETA(DisplayName = "PREFLOP"),
@@ -73,10 +64,9 @@ public:
 
 	bool GetisPlaying(int id);
 
-	void CheckGame();
-
 	void GameInit();
 	void PreFlop();
+	void CheckGame();
 	void SortPlayerHands();
 	void ScoringHands();
 	void AnalyzeHands();
@@ -106,15 +96,11 @@ protected:
 	UCard* turnCard;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCard* riverCard;
-	//Action action;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int turn;
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int sb;
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int bb;
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int dealer;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -131,6 +117,7 @@ protected:
 	int smallBet;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int biggestBet;
+
 	int playerBankroll[MAXPLAYER];
 	int playerBet[MAXPLAYER];
 	int rankScore[MAXPLAYER];

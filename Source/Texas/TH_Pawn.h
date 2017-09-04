@@ -17,6 +17,24 @@ public:
 	// Sets default values for this pawn's properties
 	ATH_Pawn();
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+
+	UFUNCTION(BlueprintCallable)
+	bool GetActed();
+
+	UFUNCTION(BlueprintCallable)
+	void SetActed(bool act);
+
+	void Call();
+	void Fold();
+	void Raise();
+	void Check();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -35,39 +53,16 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool is_tick_start;
 
-	void Call();
-	void Fold();
-	void Raise();
-	void Check();
-
-	UFUNCTION(BlueprintCallable)
-	static APlayerController* GetPlayerController(APlayerState* player_state);
-	
-	APlayerState* MyPlayerState;
+	ATH_GameState* MyGameState;
 
 	int tick;
-
 	int turn;
-
-	ATH_GameState* MyGameState;
 
 	//call, check, raise, call, check, check, check, check
 	static int simulation[8];
 	static int simulationIndex;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-
 	UFUNCTION(BlueprintCallable)
-	bool GetActed();
+	static APlayerController* GetMyPlayerController(APlayerState* player_state);
 
-	UFUNCTION(BlueprintCallable)		
-	void SetActed(bool act);
-
-	int TurnOver();
 };

@@ -40,6 +40,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void PassTurn();
 
+	int GetTurn();
+
 	UFUNCTION(BlueprintCallable)
 	UDeck* GetDeck();
 
@@ -48,9 +50,12 @@ public:
 
 	int GetNumTotalPlayer();
 	void SetNumTotalPlayer(int num);
-
+	
 	int GetNumPlayerActed();
 	void SetNumPlayerActed(int num);
+
+	int GetNumActivePlayer();
+	void SetNumActivePlayer(int num);
 	
 	int GetPot();
 	void SetPot(int chips);
@@ -65,6 +70,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int GetPlayerBankroll(int player);
 	void SetPlayerBankroll(int player,int money);
+
+	bool GetisPlaying(int id);
 
 	void CheckGame();
 
@@ -128,6 +135,6 @@ protected:
 	int playerBet[MAXPLAYER];
 	int rankScore[MAXPLAYER];
 	bool isNewPlayer[MAXPLAYER];
-
+	bool isPlaying[MAXPLAYER];
 	int winner;
 };

@@ -43,11 +43,18 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	static APlayerController* GetPlayerController(APlayerState* player_state);
 	
+	APlayerState* MyPlayerState;
+
 	int tick;
 
 	int turn;
 
 	ATH_GameState* MyGameState;
+
+	//call, check, raise, call, check, check, check, check
+	static int simulation[8];
+	static int simulationIndex;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -61,4 +68,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)		
 	void SetActed(bool act);
+
+	int TurnOver();
 };

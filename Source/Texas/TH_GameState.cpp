@@ -15,6 +15,11 @@ void ATH_GameState::PassTurn()
 	GEngine->AddOnScreenDebugMessage(-10, 1.f, FColor::Yellow, FString::Printf(TEXT("turn: %d"), turn));
 }
 
+int ATH_GameState::GetTurn()
+{
+	return turn;
+}
+
 UDeck* ATH_GameState::GetDeck()
 {
 	return deck;
@@ -57,6 +62,7 @@ void ATH_GameState::GameInit()
 	biggestBet = bigBet;
 	for (int i = 0; i < numTotalPlayer; ++i) {
 		isNewPlayer[i] = false; // 플레이어 추가될 때 true로 set
+		isPlaying[i] = true;
 		playerBet[i] = 0;
 		playerBankroll[i] = 100;
 	}
@@ -68,6 +74,7 @@ void ATH_GameState::GameInit()
 void ATH_GameState::CheckGame()
 {
 	if (numPlayerActed == numActivePlayer) {
+		//turn = (dealer + 1) % numActivePlayer;
 		switch (turnState)
 		{
 		case TurnState::PREFLOP :
@@ -105,6 +112,7 @@ void ATH_GameState::CheckGame()
 			break;
 		}
 	}
+	//else PassTurn();
 }
 
 void ATH_GameState::SetNewGame()
@@ -154,6 +162,16 @@ void ATH_GameState::SetNumPlayerActed(int num)
 	numPlayerActed = num;
 }
 
+int ATH_GameState::GetNumActivePlayer()
+{
+	return numActivePlayer;
+}
+
+void ATH_GameState::SetNumActivePlayer(int num)
+{
+	numActivePlayer = num;
+}
+
 int ATH_GameState::GetPot()
 {
 	return pot;
@@ -187,9 +205,15 @@ int ATH_GameState::GetBiggestBet()
 {
 	return biggestBet;
 }
-void ATH_GameState::SetBiggestBet(int chips)
+
+void ATH_GameState::SetBiggestBet(int money)
 {
-	biggestBet = chips;
+	biggestBet = money;
+}
+
+bool ATH_GameState::GetisPlaying(int id)
+{
+	return isPlaying[id];
 }
 
 bool sortByRank(const UCard* c1, const UCard* c2)

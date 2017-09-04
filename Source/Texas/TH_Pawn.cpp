@@ -3,6 +3,10 @@
 #include "TH_Pawn.h"
 #include "Classes/GameFramework/PlayerState.h"
 
+//call check raise call check check check check
+int ATH_Pawn::simulation[8] = { 0,1,2,0,1,1,1,1 };
+int ATH_Pawn::simulationIndex = 0;
+
 // Sets default values
 ATH_Pawn::ATH_Pawn()
 {
@@ -17,6 +21,7 @@ ATH_Pawn::ATH_Pawn()
 	VisibleComponent->SetupAttachment(RootComponent);
 }
 
+
 // Called when the game starts or when spawned
 void ATH_Pawn::BeginPlay()
 {
@@ -25,6 +30,8 @@ void ATH_Pawn::BeginPlay()
 	acted = false;
 	tick = 0;
 	MyGameState = GetWorld()->GetGameState<ATH_GameState>();
+	simulationIndex = 0;
+	turn = MyGameState->GetTurn();
 }
 
 // Called every frame
@@ -32,11 +39,20 @@ void ATH_Pawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (is_tick_start && tick < 100) tick++;
-	if (is_tick_start&&tick == 100) {
+	if (is_tick_start && tick < 150) {
+		tick++;
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("%lld"), (long long)this));
+	}
+	if (is_tick_start&&tick == 150) {
 		tick = 0;
-		Call();
+		turn = MyGameState->GetTurn();
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("%lld"), (long long)this));
+		switch (simulation[simulationIndex]) {
+		case 0: Call();simulationIndex=(simulationIndex+1)%8;break;
+		case 1: Check();simulationIndex = (simulationIndex + 1) % 8;break;
+		case 2: Raise();simulationIndex = (simulationIndex + 1) % 8;break;
+		case 3: Fold();simulationIndex = (simulationIndex + 1) % 8;break;
+		}
 	}
 
 	{
@@ -75,34 +91,56 @@ void ATH_Pawn::YawCamera(float AxisValue)
 	CameraInput.X = AxisValue;
 }
 
+int ATH_Pawn::TurnOver()
+{
+	//do {
+		//turn = (PlayerState->PlayerId + 1) % MyGameState->GetNumTotalPlayer();
+	//} while (MyGameState->GetisPlaying(turn) == false);
+	MyGameState->PassTurn();
+	return MyGameState->GetTurn();
+}
+
 void ATH_Pawn::Call()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Call");
 	acted = true;
 
 	MyGameState->SetNumPlayerActed(MyGameState->GetNumPlayerActed()+1);
-	turn = (PlayerState->PlayerId + 1) % MyGameState->GetNumTotalPlayer();
 	MyGameState->SetPot(MyGameState->GetPot() + MyGameState->GetBiggestBet() - MyGameState->GetPlayerBet(turn));
 	MyGameState->SetPlayerBet(turn, MyGameState->GetBiggestBet());
 	MyGameState->CheckGame();
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("%lld"), (long long)this));
 }
 
 void ATH_Pawn::Fold()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Fold");
 	acted = true;
+
+	MyGameState->SetNumActivePlayer(MyGameState->GetNumActivePlayer() - 1);
+	MyGameState->CheckGame();
 }
 
 void ATH_Pawn::Raise()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Raise");
 	acted = true;
+	
+	MyGameState->SetNumPlayerActed(1);
+	MyGameState->SetPot(MyGameState->GetPot() + MyGameState->GetBiggestBet()*2 - MyGameState->GetPlayerBet(turn));
+	MyGameState->SetBiggestBet(MyGameState->GetBiggestBet() * 2);
+	MyGameState->SetPlayerBet(turn, MyGameState->GetBiggestBet());
+	MyGameState->CheckGame();
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("%lld"), (long long)this));
 }
 
 void ATH_Pawn::Check()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Check");
 	acted = true;
+	MyGameState->SetNumPlayerActed(MyGameState->GetNumPlayerActed() + 1);
+	MyGameState->CheckGame();
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("%lld"), (long long)this));
 }
 
 bool ATH_Pawn::GetActed()
